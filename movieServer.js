@@ -63,15 +63,64 @@ function handleRequest(req, res) {
   }
 
   if(avg_vote && (!genre && !country ) ) {
-    response = response.filter(movie => {
-      return Number(movie.avg_vote) > Number(avg_vote)})
+    response = response.filter(movie => 
+      Number(movie.avg_vote) > Number(avg_vote))
     
-      res.json(response)
+    res.json(response)
+  }
+
+  if(genre && country && avg_vote) {
+    response = response.filter(movie => 
+        movie.genre
+        .toLowerCase()
+        .includes(genre.toLowerCase()) &&
+        movie.country
+        .toLowerCase()
+        .includes(country.toLowerCase()) &&
+        Number(movie.avg_vote) > Number(avg_vote)
+      )
+
+    res.json(response)
+  }
+
+  if(genre && country && !avg_vote) {
+    response = response.filter(movie => 
+      movie.genre
+      .toLowerCase()
+      .includes(genre.toLowerCase()) &&
+      movie.country
+      .toLowerCase()
+      .includes(country.toLowerCase())
+    )
+
+  res.json(response)
+
+  }
+
+  if(genre && !country && avg_vote) {
+    response = response.filter(movie => 
+      movie.genre
+      .toLowerCase()
+      .includes(genre.toLowerCase()) &&
+      Number(movie.avg_vote) > Number(avg_vote)
+    )
+
+  res.json(response)
+  }
+
+  if(!genre && country && avg_vote) {
+    response = response.filter(movie => 
+      movie.country
+      .toLowerCase()
+      .includes(country.toLowerCase()) &&
+      Number(movie.avg_vote) > Number(avg_vote)
+
+    )
+
+  res.json(response)
   }
 
 }
-
-
 app.get('/moviedex', handleRequest)
 
 app.listen(8000, () => {
