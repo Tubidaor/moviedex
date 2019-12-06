@@ -29,6 +29,15 @@ app.use(function validateBearerToken(req, res, next) {
 
   next();
 });
+app.use((error, req, res, next) => {
+  let response
+  if (process.env.NODE_ENV === 'production') {
+    response = { error: { message: 'server error' }}
+  } else {
+    response = { error }
+  }
+  res.status(500).json(response)
+});
 
 function handleRequest(req, res) {
   const {genre, country, avg_vote} = req.query ;
@@ -123,6 +132,5 @@ function handleRequest(req, res) {
 }
 app.get('/moviedex', handleRequest)
 
-app.listen(8000, () => {
-  console.log('I\'m listenting - Frazier')
-})
+const PORT = process.env.PORT || 8000
+app.listen(PORT, () => {})
