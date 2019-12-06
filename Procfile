@@ -1,1 +1,1 @@
-web: node movieServer.js
+web: node server.js
