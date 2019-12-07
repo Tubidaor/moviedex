@@ -44,22 +44,12 @@ function handleRequest(req, res) {
   
   let response = movieObject.movieData;
 
-  if(!genre && !country && !avg_vote) {
-    res
-      .status(400)
-      .send('Please select a search criterion');
-  }
-
-  
-
-  if(genre && (!country && !avg_vote )) {
+  if(genre) {
     response = response.filter(movie =>
       movie.genre.toLowerCase().includes(genre.toLowerCase()));
-    res.json(response);
-
   }
 
-  if(country && (!genre && !avg_vote ) ) {
+  if(country) {
     if(country.length <= 2) {
       res
         .status(400)
@@ -67,67 +57,14 @@ function handleRequest(req, res) {
     }
     response = response.filter(movie =>
       movie.country.toLowerCase().includes(country.toLowerCase()))
-    
-      res.json(response)
   }
 
-  if(avg_vote && (!genre && !country ) ) {
+  if(avg_vote) {
     response = response.filter(movie => 
       Number(movie.avg_vote) > Number(avg_vote))
-    
-    res.json(response)
   }
-
-  if(genre && country && avg_vote) {
-    response = response.filter(movie => 
-        movie.genre
-        .toLowerCase()
-        .includes(genre.toLowerCase()) &&
-        movie.country
-        .toLowerCase()
-        .includes(country.toLowerCase()) &&
-        Number(movie.avg_vote) > Number(avg_vote)
-      )
-
-    res.json(response)
-  }
-
-  if(genre && country && !avg_vote) {
-    response = response.filter(movie => 
-      movie.genre
-      .toLowerCase()
-      .includes(genre.toLowerCase()) &&
-      movie.country
-      .toLowerCase()
-      .includes(country.toLowerCase())
-    )
 
   res.json(response)
-
-  }
-
-  if(genre && !country && avg_vote) {
-    response = response.filter(movie => 
-      movie.genre
-      .toLowerCase()
-      .includes(genre.toLowerCase()) &&
-      Number(movie.avg_vote) > Number(avg_vote)
-    )
-
-  res.json(response)
-  }
-
-  if(!genre && country && avg_vote) {
-    response = response.filter(movie => 
-      movie.country
-      .toLowerCase()
-      .includes(country.toLowerCase()) &&
-      Number(movie.avg_vote) > Number(avg_vote)
-
-    )
-
-  res.json(response)
-  }
 
 }
 app.get('/moviedex', handleRequest)
